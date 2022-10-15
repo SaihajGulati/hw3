@@ -1,0 +1,4 @@
+.vscode/
+llrec-test
+llrec-test.o
+llrec.o

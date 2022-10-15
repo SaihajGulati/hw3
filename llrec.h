@@ -75,14 +75,35 @@ Node* llfilter(Node* head, Comp pred);
 // implement the above function now.
 //*****************************************************************************
 
+//recursive small thing to attack is eachc value we want
 template <typename Comp>
 Node* llfilter(Node* head, Comp pred)
 {
     //*********************************************
     // Provide your implementation below
     //*********************************************
+    //base case: if get to end of linked list, return null
+    if (head == nullptr)
+    {
+        return nullptr;
+    }
 
+    //otherwise if pred is fase, we want to keep this make it so that our next is next one we want to keep
+    //then return this one as this is the earliest we know to keep
+    else if (!pred(head->val))
+    {
+        head->next = llfilter(head->next, pred);
+        return head;
+    }
 
+   //otherwise we just need to return up the next one to keep, so that it can be chained when previous one found 
+   //means this one is removed and deallocated, and make call to function with next node
+    else
+    {
+        Node* temp = head->next;
+        delete head;
+        return llfilter(temp, pred);
+    }
 }
 
 #endif
