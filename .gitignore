@@ -2,3 +2,5 @@
 llrec-test
 llrec-test.o
 llrec.o
+test
+test.dSYM/
