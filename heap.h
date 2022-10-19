@@ -2,6 +2,7 @@
 #define HEAP_H
 #include <functional>
 #include <stdexcept>
+#include <vector>
 
 template <typename T, typename PComparator = std::less<T> >
 class Heap
@@ -62,20 +63,20 @@ public:
 private:
   /// Add whatever helper functions and data members you need below
   std::vector<T> data;
-  int mary;
+  std::size_t mary;
   PComparator comp;
   
   //heapify/trickle down function with default index of 0
   void heapify(std::size_t index = 0);
 
-  void trickleUp(std::size_t index = data.size()- 1);
+  void trickleUp(std::size_t index);
 };
 
 // Add implementation of member functions here
 
 //constructor sets mary and comp, using initalization list as that is preferred
 template <typename T, typename PComparator>
-Heap<T,PComparator>::Heap(int m=2, PComparator c = PComparator()) :
+Heap<T,PComparator>::Heap(int m, PComparator c) :
   mary(m), comp(c)
 {
 }
@@ -118,15 +119,15 @@ void Heap<T,PComparator>::pop()
     // ================================
     throw std::underflow_error("heap is empty");
   }
-    //put bottom (worst value on top), also removes top value effectively
-    data[0] = data[data.size()-1]
+    //swap top and bottom, so bottom is at top now and can be trickled down later
+    std::swap(data[0], data[data.size()-1]);
     
-    //pop back, which was where the current top was before
+    //pop back, which was where the top is since we want to pop the top off
     data.pop_back();
 
     //heapify/trickle-down to make sure heap property is maintained
     //no parameter needed as default is 0
-    heapify()
+    heapify();
 }
 
 /**
@@ -150,7 +151,7 @@ void Heap<T,PComparator>::push(const T& item)
 
   //trickle it up
   //don't need parameter since will call the end by default
-  trickleUp();
+  trickleUp(data.size()-1);
 }
 
 /**
@@ -176,9 +177,8 @@ std::size_t Heap<T,PComparator>::size() const
 template <typename T, typename PComparator>
 void Heap<T,PComparator>::heapify(std::size_t index)
 {
-  std::size_t child = 2 * curr + 1;
   //vector to store all indexes of children this index node has
-  vector<std::size_t> children;
+  std::vector<std::size_t> children;
   std::size_t child = 2 * index + 1;
 
   //run until get to a child value that is not valid (either no children left, or have maximum amount of children), 
@@ -195,22 +195,22 @@ void Heap<T,PComparator>::heapify(std::size_t index)
     return;
   }
 
-  //gets bestChild's index
-  std::size_t bestChild = data[childIndexes[0]];
-  for (std::size_t i = 0; i < childIndexes.size(); i++)
+  //set bestchild as the first child for now
+  std::size_t bestChild = children[0];
+  for (std::size_t i = 0; i < children.size(); i++)
   {
-    //if this child is better than the bestChild, set best child index to this's index
-    if (comp(data[childIndexes[i]], data[childIndexes[bestChild]]))
+    //if this child's value is better than the supposed bestChild's value, set best child index to this's index
+    if (comp(data[children[i]], data[bestChild]))
     {
-      bestChild = childIndexes[i];
+      bestChild = children[i];
     }
   }
 
   //if the best child is better than this index (so this index is worse) swap so that this index value has trickled down
   //call heapify again, now with the index to which my original index's value has been placed
-  if (comp(childIndexes[bestChild], childIndexes[index]))
+  if (comp(data[bestChild], data[index]))
   {
-    std::swap(childIndexes[i], childIndexes[bestChild])
+    std::swap(data[index], data[bestChild]);
     heapify(bestChild);
   }
 }

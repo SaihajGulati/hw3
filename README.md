@@ -1,4 +1,4 @@
-For Parts 1 and 2, compile my llrec and tester with 
+For Parts 1 and 2, compile my llrec and tester by cd into hw3 and then with 
 ```
 make
 ```
