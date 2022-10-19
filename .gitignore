@@ -4,3 +4,11 @@ llrec-test.o
 llrec.o
 test
 test.dSYM/
+heap_test.cpp
+heap_test/
+logicsim/circuit.o
+logicsim/gate.o
+logicsim/logicsim
+logicsim/logicsim.o
+logicsim/my_or.uml
+logicsim/wire.o
