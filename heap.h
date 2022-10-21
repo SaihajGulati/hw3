@@ -72,6 +72,7 @@ private:
   void trickleUp(std::size_t index);
 };
 
+
 // Add implementation of member functions here
 
 //constructor sets mary and comp, using initalization list as that is preferred
@@ -176,34 +177,27 @@ std::size_t Heap<T,PComparator>::size() const
 
 template <typename T, typename PComparator>
 void Heap<T,PComparator>::heapify(std::size_t index)
-{
-  //vector to store all indexes of children this index node has
-  std::vector<std::size_t> children;
-  std::size_t child = mary * index + 1;
-
-  //run until get to a child value that is not valid (either no children left, or have maximum amount of children), 
-  //filling children vector with valid child indexes
-  while (child < data.size() && children.size() <= mary)
-  {
-    children.push_back(child);
-    child += 1;
-  }
-  
+{  
+  //create variables for looping
+  std::size_t firstChild = mary * index + 1;
   //if has no children (and thus index is a leaf node), return (base case of recursion)
-  if (children.size() == 0)
+  if (firstChild >= data.size())
   {
     return;
   }
 
-  //set bestchild as the first child for now
-  std::size_t bestChild = children[0];
-  for (std::size_t i = 0; i < children.size(); i++)
+  std::size_t child = firstChild;
+  std::size_t bestChild = child;
+
+  //run while child is not out of bounds (meaning reached leaf node) and is less than max anount of children
+  while (child < data.size() && (child - firstChild < mary))
   {
     //if this child's value is better than the supposed bestChild's value, set best child index to this's index
-    if (comp(data[children[i]], data[bestChild]))
+    if (comp(data[child], data[bestChild]))
     {
-      bestChild = children[i];
+      bestChild = child;
     }
+    child += 1;
   }
 
   //if the best child is better than this index (so this index is worse) swap so that this index value has trickled down
