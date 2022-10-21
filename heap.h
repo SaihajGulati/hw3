@@ -179,7 +179,7 @@ void Heap<T,PComparator>::heapify(std::size_t index)
 {
   //vector to store all indexes of children this index node has
   std::vector<std::size_t> children;
-  std::size_t child = 2 * index + 1;
+  std::size_t child = mary * index + 1;
 
   //run until get to a child value that is not valid (either no children left, or have maximum amount of children), 
   //filling children vector with valid child indexes
@@ -219,7 +219,7 @@ template <typename T, typename PComparator>
 void Heap<T,PComparator>::trickleUp(std::size_t index)
 {
 
-  std::size_t parentIndex = (index - 1) / 2;
+  std::size_t parentIndex = (index - 1) / mary;
 
   //setting variables to simplify syntax, but need to be references for swap to work
   T& current = data[index];
